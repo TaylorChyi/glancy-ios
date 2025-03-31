@@ -4,13 +4,14 @@
 //
 //  Created by 齐天乐 on 2025/3/27.
 //
-
 import SwiftUI
 
 struct ContentView: View {
     @StateObject private var viewModel = DictionaryViewModel()
     @State private var showSettings = false
+    @State private var showAuthSheet = false
 
+    // availableLanguages 由设置中允许的语言决定（设置界面只提供可选列表）
     private var availableLanguages: [Language] {
         let codes = LanguagePreferenceManager.shared.load()
         return Language.allLanguages.filter { codes.contains($0.code) }
@@ -20,7 +21,7 @@ struct ContentView: View {
         NavigationView {
             VStack(spacing: 0) {
 
-                // 语言按钮（可切换开关）
+                // 语言按钮（点击后切换实际请求使用的语言开关）
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
                         ForEach(availableLanguages) { lang in
@@ -55,7 +56,7 @@ struct ContentView: View {
 
                 Divider()
 
-                // 底部输入栏 + 搜索按钮
+                // 底部输入栏 + 搜索按钮（仿微信样式）
                 HStack(spacing: 8) {
                     TextField("请输入单词", text: $viewModel.inputWord)
                         .padding(12)
@@ -77,15 +78,32 @@ struct ContentView: View {
                 .background(Color(.systemBackground).ignoresSafeArea(.keyboard, edges: .bottom))
             }
             .toolbar {
-                Button(action: {
-                    showSettings = true
-                }) {
-                    Image(systemName: "gear")
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        showSettings = true
+                    }) {
+                        Image(systemName: "gear")
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showAuthSheet = true
+                    }) {
+                        Image(systemName: "person.crop.circle")
+                    }
                 }
             }
             .sheet(isPresented: $showSettings) {
                 NavigationView {
                     LanguageSettingView()
+                }
+            }
+            .sheet(isPresented: $showAuthSheet) {
+                // 如果当前未登录，则显示登录界面，否则显示用户个人中心界面
+                if AuthService.shared.currentUser() == nil {
+                    LoginView()
+                } else {
+                    UserProfileView()
                 }
             }
         }

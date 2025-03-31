@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="icon.png" alt="Glancy App Icon" width="150"/>
+</p>
+
 - [English Version](README.md)
 - [中文版](README_zh.md)
 - [日本語版](README_ja.md)

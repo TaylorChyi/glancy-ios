@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E15EE3112D9A5ED400F2E6E1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = E15EE3102D9A5ECC00F2E6E1 /* README.md */; };
 		E1E6E78E2D95A4D400F48C36 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = E1E6E78D2D95A4D400F48C36 /* Alamofire */; };
 		E1E6E7A32D95A6BC00F48C36 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E1E6E7A22D95A6BC00F48C36 /* RealmSwift */; };
 		E1E6E7C22D95CBA900F48C36 /* LeanCloud in Frameworks */ = {isa = PBXBuildFile; productRef = E1E6E7C12D95CBA900F48C36 /* LeanCloud */; };
@@ -30,12 +31,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E15EE3102D9A5ECC00F2E6E1 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E1E6E7572D95A35600F48C36 /* Glancy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Glancy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1E6E7672D95A35700F48C36 /* GlancyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GlancyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1E6E7712D95A35700F48C36 /* GlancyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GlancyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		E15EE3162D9A608900F2E6E1 /* Docs */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Docs;
+			sourceTree = "<group>";
+		};
 		E1E6E7592D95A35600F48C36 /* Glancy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Glancy;
@@ -84,6 +91,8 @@
 		E1E6E74E2D95A35500F48C36 = {
 			isa = PBXGroup;
 			children = (
+				E15EE3162D9A608900F2E6E1 /* Docs */,
+				E15EE3102D9A5ECC00F2E6E1 /* README.md */,
 				E1E6E7592D95A35600F48C36 /* Glancy */,
 				E1E6E76A2D95A35700F48C36 /* GlancyTests */,
 				E1E6E7742D95A35700F48C36 /* GlancyUITests */,
@@ -117,6 +126,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				E15EE3162D9A608900F2E6E1 /* Docs */,
 				E1E6E7592D95A35600F48C36 /* Glancy */,
 			);
 			name = Glancy;
@@ -229,6 +239,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E15EE3112D9A5ED400F2E6E1 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
