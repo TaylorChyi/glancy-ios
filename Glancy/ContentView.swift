@@ -11,7 +11,7 @@ struct ContentView: View {
     @State private var showSettings = false
     @State private var showAuthSheet = false
 
-    // availableLanguages 由设置中允许的语言决定（设置界面只提供可选列表）
+    // availableLanguages 从设置中确定显示哪些语言按钮
     private var availableLanguages: [Language] {
         let codes = LanguagePreferenceManager.shared.load()
         return Language.allLanguages.filter { codes.contains($0.code) }
@@ -20,8 +20,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-
-                // 语言按钮（点击后切换实际请求使用的语言开关）
+                // 顶部语言按钮区域（点击切换实际请求使用的语言）
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
                         ForEach(availableLanguages) { lang in
@@ -37,9 +36,7 @@ struct ContentView: View {
                     .padding(.horizontal)
                     .padding(.top, 10)
                 }
-
-                Divider()
-
+                
                 // 查询结果展示区
                 ScrollView {
                     if viewModel.isLoading {
@@ -53,17 +50,22 @@ struct ContentView: View {
                         Spacer()
                     }
                 }
-
-                Divider()
-
-                // 底部输入栏 + 搜索按钮（仿微信样式）
+                
+                // 历史搜索记录标签区（最新10个搜索词）
+                HistoryTagsView { selectedWord in
+                    viewModel.inputWord = selectedWord
+                    viewModel.queryWord()
+                }
+                
+                // 底部输入栏及搜索按钮（类似聊天输入栏）
                 HStack(spacing: 8) {
                     TextField("请输入单词", text: $viewModel.inputWord)
                         .padding(12)
                         .background(Color(.systemGray6))
                         .cornerRadius(20)
-
+                    
                     Button(action: {
+                        print("asdfadsfa")
                         viewModel.queryWord()
                     }) {
                         Image(systemName: "magnifyingglass")
@@ -99,9 +101,8 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showAuthSheet) {
-                // 如果当前未登录，则显示登录界面，否则显示用户个人中心界面
                 if AuthService.shared.currentUser() == nil {
-                    LoginView()
+                    MultiMethodLoginView()
                 } else {
                     UserProfileView()
                 }
