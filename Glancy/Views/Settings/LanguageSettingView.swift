@@ -4,15 +4,14 @@
 //
 //  Created by 齐天乐 on 2025/3/28.
 //
-
 import SwiftUI
 
 struct LanguageSettingView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var selected: [LanguageCode] = LanguagePreferenceManager.shared.load()
-
+    
     let allLanguages = Language.allLanguages
-
+    
     var body: some View {
         List {
             ForEach(allLanguages) { lang in
@@ -39,7 +38,7 @@ struct LanguageSettingView: View {
             }
         }
     }
-
+    
     private func toggleSelection(_ code: LanguageCode) {
         if selected.contains(code) {
             if selected.count > 1 {

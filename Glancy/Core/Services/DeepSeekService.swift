@@ -85,25 +85,66 @@ class DeepSeekService {
 
         let langDisplay = languages.map { $0.rawValue }.joined(separator: ", ")
         let prompt = """
-        请用以下语言分别对 “\(word)” 提供翻译和例句（对齐显示）：\(langDisplay)
-        例如格式：Apple 苹果\nI like apple. 我喜欢吃苹果。
+        请用以下语言分别对 “\(word)” 提供翻译和例句，输出格式必须是 JSON，便于机器解析。示例格式如下：
+
+        {
+          "word": "Apple",
+          "translations": {
+            "中文": "苹果",
+            "日语": "リンゴ"
+          },
+          "examples": {
+            "中文": "我喜欢吃苹果。",
+            "日语": "私はリンゴが好きです。"
+          }
+        }
+
+        现在请处理词语：“\(word)”，语言包括：\(langDisplay)。请严格遵守 JSON 格式返回。
         """
 
         let parameters: [String: Any] = [
             "model": "deepseek-chat",
             "messages": [
+                ["role": "system", "content": systemPrompt],
                 ["role": "user", "content": prompt]
-            ]
+            ],
+            "response_format": [
+                    "type": "json_object"
+                ],
+            "max_tokens": 1024
         ]
 
         AF.request(apiURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .validate()
-            .responseDecodable(of: DeepSeekResponse.self) { response in
+            .responseData { response in
+                // 打印请求的完整内容
+                print("➡️ 请求 URL: \(self.apiURL)")
+                print("📦 请求 Headers: \(headers)")
+                print("📝 请求参数: \(parameters)")
+                
+                // 打印响应状态码
+                if let httpResponse = response.response {
+                    print("✅ 响应状态码: \(httpResponse.statusCode)")
+                }
+
                 switch response.result {
-                case .success(let result):
-                    let content = result.choices.first?.message.content ?? "无结果"
-                    completion(.success(content))
+                case .success(let data):
+                    // 打印原始 JSON 字符串（便于排查格式问题）
+                    if let jsonString = String(data: data, encoding: .utf8) {
+                        print("📨 原始响应 JSON:\n\(jsonString)")
+                    }
+                    
+                    do {
+                        let decoder = JSONDecoder()
+                        let result = try decoder.decode(DeepSeekResponse.self, from: data)
+                        let content = result.choices.first?.message.content ?? "无结果"
+                        completion(.success(content))
+                    } catch {
+                        print("❌ JSON 解码失败: \(error)")
+                        completion(.failure(error))
+                    }
                 case .failure(let error):
+                    print("❗️请求失败: \(error)")
                     completion(.failure(error))
                 }
             }
