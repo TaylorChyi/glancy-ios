@@ -4,7 +4,6 @@
 //
 //  Created by 齐天乐 on 2025/3/31.
 //
-
 import SwiftUI
 import LeanCloud
 
@@ -20,7 +19,7 @@ struct UserProfileView: View {
                     Text("欢迎, \(user.username?.value ?? "匿名用户")")
                         .font(.title)
                     
-                    // 可扩展头像、昵称等信息
+                    // 显示扩展信息，后续可扩展头像、昵称编辑等
                     Button(action: {
                         logout()
                     }) {
