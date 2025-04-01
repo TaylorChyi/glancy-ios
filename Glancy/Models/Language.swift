@@ -8,7 +8,7 @@
 import Foundation
 
 enum LanguageCode: String, CaseIterable {
-    case en, zh, ja, ko, fr, de, pt, es, ar
+    case en, zh, ja, ko, fr, de, pt, es, ar, ru
 }
 
 struct Language: Identifiable {
@@ -26,6 +26,7 @@ struct Language: Identifiable {
         Language(code: .de, name: "Deutsch", flag: "🇩🇪"),
         Language(code: .pt, name: "Português", flag: "🇵🇹"),
         Language(code: .es, name: "Español", flag: "🇪🇸"),
-        Language(code: .ar, name: "العربية", flag: "🇸🇦")
+        Language(code: .ar, name: "العربية", flag: "🇸🇦"),
+        Language(code: .ru, name: "Русский", flag: "🇷🇺")
     ]
 }
