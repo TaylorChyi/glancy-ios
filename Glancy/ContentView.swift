@@ -10,44 +10,32 @@ struct ContentView: View {
     @StateObject private var viewModel = DictionaryViewModel()
     @State private var showSettings = false
     @State private var showAuthSheet = false
-
-    // availableLanguages 从设置中确定显示哪些语言按钮
-    private var availableLanguages: [Language] {
-        let codes = LanguagePreferenceManager.shared.load()
-        return Language.allLanguages.filter { codes.contains($0.code) }
-    }
-
+    
+    // 全部可选语言列表
+    let allLanguages = ["en", "ko", "zh", "ja", "fr", "de"]
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // 顶部语言按钮区域（点击切换实际请求使用的语言）
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        ForEach(availableLanguages) { lang in
-                            Text("\(lang.flag) \(lang.name)")
-                                .padding(8)
-                                .background(viewModel.selectedLanguages.contains(lang.code) ? Color.blue.opacity(0.3) : Color.gray.opacity(0.2))
-                                .cornerRadius(8)
-                                .onTapGesture {
-                                    viewModel.toggleLanguage(lang.code)
-                                }
-                        }
-                    }
-                    .padding(.horizontal)
-                    .padding(.top, 10)
-                }
+                LanguageBarView(viewModel: viewModel)
                 
                 // 查询结果展示区
                 ScrollView {
+                    // 提示 Loading or Error
                     if viewModel.isLoading {
                         ProgressView("加载中...")
-                            .padding()
-                    } else if !viewModel.resultText.isEmpty {
-                        Text(viewModel.resultText)
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    } else {
-                        Spacer()
+                    } else if let err = viewModel.errorMessage {
+                        Text("错误：\(err)")
+                            .foregroundColor(.red)
+                    }
+                    
+                    NavigationLink(
+                        destination: WordDetailView(
+                            response: DeepSeekTranslationResponse.testData,
+                            selectedLanguages: ["en"]
+                        )
+                    ) {
+                        Text("查看详情")
                     }
                 }
                 
@@ -65,7 +53,6 @@ struct ContentView: View {
                         .cornerRadius(20)
                     
                     Button(action: {
-                        print("asdfadsfa")
                         viewModel.queryWord()
                     }) {
                         Image(systemName: "magnifyingglass")
@@ -97,6 +84,7 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showSettings) {
                 NavigationView {
+                    // 在设置界面保存时，发送 languagePreferenceUpdated 通知
                     LanguageSettingView()
                 }
             }

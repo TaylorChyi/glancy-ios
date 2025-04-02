@@ -33,6 +33,7 @@ struct LanguageSettingView: View {
             ToolbarItem(placement: .confirmationAction) {
                 Button("保存") {
                     LanguagePreferenceManager.shared.save(selected)
+                    NotificationCenter.default.post(name: .languagePreferenceUpdated, object: nil)
                     presentationMode.wrappedValue.dismiss()
                 }
             }

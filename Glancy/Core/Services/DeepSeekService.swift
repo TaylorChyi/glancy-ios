@@ -77,13 +77,13 @@ class DeepSeekService {
     •    如果在任何情况下无相关信息或非常确定信息不存在，请在对应位置明确写“暂无相关信息”或“未知”。
     """
     
-    func queryDefinition(for word: String, languages: [LanguageCode], completion: @escaping (Result<String, Error>) -> Void) {
+    func queryDefinition(for word: String, completion: @escaping (Result<String, Error>) -> Void) {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(SecretsManager.deepSeekApiKey)",
             "Content-Type": "application/json"
         ]
 
-        let langDisplay = languages.map { $0.rawValue }.joined(separator: ", ")
+        let langDisplay = LanguageCode.allCases.map { $0.rawValue }.joined(separator: ", ")
         let prompt = """
         请用以下语言分别对 “\(word)” 提供翻译和例句，输出格式必须是 JSON，便于机器解析。示例格式如下：
 

@@ -5,7 +5,9 @@ class DictionaryViewModel: ObservableObject {
     @Published var resultText: String = ""
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
-    
+    @Published var deepSeekResponse: DeepSeekResponse? // or whatever type it is
+    @Published var deepSeekTranslationResponse: DeepSeekTranslationResponse? // or whatever type it is
+
     // 当前请求使用的语言（由主界面语言按钮控制）
     @Published var selectedLanguages: [LanguageCode] = LanguagePreferenceManager.shared.load()
 
@@ -48,18 +50,17 @@ class DictionaryViewModel: ObservableObject {
     }
     
     private func fetchFromDeepSeek() {
-        DeepSeekService.shared.queryDefinition(for: inputWord, languages: selectedLanguages) { [weak self] result in
+        DeepSeekService.shared.queryDefinition(for: inputWord) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {
                 case .success(let content):
-                    // Step 1: 显示
                     self?.resultText = content
-                    
-                    // Step 2: 解析并存储
-                    let parsed = DeepSeekParser.parse(content: content, for: self?.inputWord ?? "")
-                    self?.cloudService.saveDefinition(word: parsed.word, definition: parsed.definition)
 
+                    self?.cloudService.saveDefinition(
+                        word: self?.deepSeekTranslationResponse?.word ?? "",
+                        definition: self?.deepSeekTranslationResponse?.translations.values.sorted().first ?? ""
+                    )
                 case .failure(let error):
                     self?.errorMessage = error.localizedDescription
                 }
