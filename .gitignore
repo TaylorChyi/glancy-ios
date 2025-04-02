@@ -1,0 +1,49 @@
+# macOS 系统 / Spotlight / 缩略图等
+.DS_Store
+.Spotlight-V100
+.Trashes
+*.swp
+*.swo
+
+# Xcode / iOS
+*.xcworkspace
+*.xcuserstate
+*.xcuserdata/
+DerivedData/
+build/
+*.log
+xcshareddata/WorkspaceSettings.xcsettings
+timeline.xctimeline
+playground.xcworkspace
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/xcshareddata/xcschemes/*
+*.xccheckout
+
+# Swift Package Manager
+/.build/
+/.swiftpm/xcode/outputs
+/.swiftpm/repositories
+/.artifactcache/
+
+# CocoaPods（可选）
+Pods/
+Podfile.lock
+
+# Carthage（可选）
+Carthage/Build
+Carthage/Checkouts
+
+# Realm 数据库文件
+*.realm
+*.realm.lock
+*.realm.management/
+
+# 其他
+*.sh~
+*.tmp
+*.bak
+*.orig
+*.exe
+*.plist~
