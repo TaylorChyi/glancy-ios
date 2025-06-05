@@ -45,5 +45,7 @@ Carthage/Checkouts
 *.tmp
 *.bak
 *.orig
+Package.swift
+Sources/
 *.exe
 *.plist~
