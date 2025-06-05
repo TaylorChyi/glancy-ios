@@ -2,7 +2,7 @@
 
 > **Purpose**  This file tells ChatGPT Codex \*\*how to act on \*\****glancy‑ios***: build, test, respect code style and stay within allowed directories.
 >
-> *The ******************business‑level requirement specification****************** lives in ****************`README.md`**************** (English, 中文, 日本語).  Whenever README changes, update the Traceability Matrix & Acceptance Criteria below so Codex can regenerate tests in sync.*
+> *The ******************business‑level requirement specification****************** lives in ****************`README.md`**************** (English, 中文, 日本語).  Whenever README changes, update the Traceability Matrix & Acceptance Criteria there so Codex can regenerate tests in sync.*
 
 ```yaml
 root: true            # Instruct Codex to apply the rules repo‑wide
@@ -12,63 +12,8 @@ updated: 2025‑06‑05    # ISO‑8601; keep in sync with CHANGELOG
 
 ---
 
-## 1  Glossary
 
-| Term                    | Definition                                                           |
-| ----------------------- | -------------------------------------------------------------------- |
-| **Actor**               | A role that interacts with the system (user, admin, scheduler, etc.) |
-| **Order**               | A customer‑initiated request to purchase one or more items.          |
-| **Inventory Unit (IU)** | Single SKU record representing stock on hand.                        |
-
-> Keep this table alphabetised; update whenever new domain terms appear.
-
----
-
-## 2  Functional Requirements (FR)
-
-Each requirement **must** be individually testable and cross‑referenced from the Traceability Matrix.
-
-| ID     | Title        | Description                                                                   | Priority | Acceptance Criteria |
-| ------ | ------------ | ----------------------------------------------------------------------------- | -------- | ------------------- |
-| FR‑001 | Place Order  | The system shall allow an authenticated Actor to place an order with ≥1 item. | P0       | See AC‑001…AC‑004   |
-| FR‑002 | Cancel Order | The system shall let the Actor cancel any order in `NEW` status.              | P1       | See AC‑005…AC‑006   |
-
-### 2.1  Acceptance Criteria
-
-Format: **Given / When / Then** (Gherkin‑style). Link each scenario to the FR it validates.
-
-```gherkin
-# AC‑001 – happy path
-given the cart contains two items and payment token X
-when the Actor submits the order
-then the order is stored with status "NEW" and total == sum(item.price)
-```
-
----
-
-## 3  Non‑Functional Requirements (NFR)
-
-| ID      | Category    | Requirement                                         | Metric / Threshold                 |
-| ------- | ----------- | --------------------------------------------------- | ---------------------------------- |
-| NFR‑S01 | Security    | All external APIs must require OAuth 2.1 with PKCE. | 100 % endpoints verified           |
-| NFR‑P01 | Performance | Place‑order API ⩽ 250 ms P95 under 500 req/s.       | Grafana dashboard `orders.latency` |
-| NFR‑R01 | Reliability | 99.9 % monthly availability.                        | SLO monitored via Sentry           |
-
----
-
-## 4  Traceability Matrix
-
-| Requirement | Unit Test(s)                                          | Integration                    | E2E / BDD                               |
-| ----------- | ----------------------------------------------------- | ------------------------------ | --------------------------------------- |
-| FR‑001      | `tests/unit/order_service_test.py::test_create_order` | `tests/int/api_orders_test.ts` | `features/orders/create_order.feature`  |
-| FR‑002      | `tests/unit/order_service_test.py::test_cancel_order` | ...                            | ...                                     |
-| NFR‑P01     | `tests/perf/locustfile.py`                            | N/A                            | `monitoring/grafana/order_latency.json` |
-
-> **Codex guidance**  When adding or modifying code, ensure the corresponding row in this matrix remains green. If a row is missing tests, generate them.
-
----
-
-## 5  Commands for Codex
+## 1  Commands for Codex
 
 ```bash
 # Build everything (no network)
@@ -85,7 +30,7 @@ Any patch **must** leave all of the above commands with exit 0.
 
 ---
 
-## 6  Restricted Areas (Glancy‑iOS Specific)
+## 2  Restricted Areas (Glancy‑iOS Specific)
 
 The paths below are **off‑limits** for automated edits. Codex may propose changes in a PR but must not commit directly.
 
@@ -102,7 +47,7 @@ If a change is essential, Codex should open a **draft PR**, tag `@TaylorChyi` an
 
 ---
 
-## 7  Release & Milestone Log
+## 3  Release & Milestone Log
 
 We adopt **Semantic Versioning 2.0.0** (MAJOR.MINOR.PATCH) ([semver.org](https://semver.org/?utm_source=chatgpt.com)):
 
@@ -116,7 +61,7 @@ Instead of updating this log on every commit, we create an entry **per GitHub Mi
 
 1. All linked issues/PRs are merged.
 2. Unit and UI tests pass on CI.
-3. Acceptance criteria in §2 are met.
+3. Acceptance criteria in `README.md` are met.
 
 **Template**
 
@@ -140,9 +85,9 @@ Append a row for every spec update; bump `version:` in the YAML header according
 
 ---
 
-## 8  Maintenance Workflow
+## 4  Maintenance Workflow
 
-1. **Edit requirements here** ➜ update Traceability Matrix.
+1. **Edit requirements in README** ➜ update Traceability Matrix there.
 2. Trigger a **Codex *********************************Code********************************* task** titled *“Sync tests with spec vX.Y.Z”*.
 3. Review the generated diff & new/updated tests.
 4. Merge after CI passes.
@@ -152,7 +97,7 @@ Append a row for every spec update; bump `version:` in the YAML header according
 
 ---
 
-## 8  Requirements Status Tracking
+## 5  Requirements Status Tracking
 
 To make progress visible and auditable, each requirement row gains a **Status** column with one of:
 
@@ -161,11 +106,11 @@ To make progress visible and auditable, each requirement row gains a **Status** 
 * `Implemented` – merged but tests red
 * `Verified` – tests green & acceptance criteria met
 
-Update status in both the FR/NFR tables and Traceability Matrix when moving through stages. Codex must refuse to mark “Verified” unless all mapped tests pass.
+Update status in the README FR/NFR tables and the Traceability Matrix there when moving through stages. Codex must refuse to mark “Verified” unless all mapped tests pass.
 
 ---
 
-## 9  Pull Request Submission Structure
+## 6  Pull Request Submission Structure
 
 When opening a PR (whether human‑authored or Codex‑generated) you **must use** the template below. Codex should auto‑populate each field; humans must not remove any section.
 
@@ -184,15 +129,15 @@ When opening a PR (whether human‑authored or Codex‑generated) you **must use
 
 ---
 
-## 10 Documentation Quality & Style Requirements
+## 7 Documentation Quality & Style Requirements
 
 To ensure every future **specification change is crystal‑clear and rich enough for automatic test generation**, follow the rules below. These rules are *binding* for any Codex‑generated content and for human contributors alike.
 
 | Rule ID | Scope               | Requirement                                                                                                                      | Rationale                                                                           |
 | ------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | DQ‑01   | Functional Req      | Each **FR** section **must** include: **Context**, **Main Flow**, **Alternative Flows**, **Post‑conditions**, **Exceptions**.    | Mirrors IEEE 29148 recommended requirement attributes, preventing ambiguous intent. |
-| DQ‑02   | Acceptance Criteria | ≥ 3 scenarios per FR: **happy path**, **boundary**, **negative**. Use Given/When/Then and reference domain terms from §1.        | Multiple scenarios improve test coverage and follow Gherkin best practices.         |
-| DQ‑03   | Traceability        | Update the Traceability Matrix simultaneously with the spec edit. If a row is missing a test file path, Codex must scaffold one. | Ensures ISO 29119 traceability and living documentation alignment.                  |
+| DQ‑02   | Acceptance Criteria | ≥ 3 scenarios per FR: **happy path**, **boundary**, **negative**. Use Given/When/Then and reference domain terms from `README` glossary.        | Multiple scenarios improve test coverage and follow Gherkin best practices.         |
+| DQ‑03   | Traceability        | Update the Traceability Matrix in README simultaneously with the spec edit. If a row is missing a test file path, Codex must scaffold one. | Ensures ISO 29119 traceability and living documentation alignment.                  |
 | DQ‑04   | Rationale           | Every FR / NFR table row must have a one‑sentence **Why** after the Description.                                                 | Makes intent explicit for future maintainers.                                       |
 | DQ‑05   | Diagrams            | If a flow involves > 2 actors or async messaging, include a **PlantUML sequence diagram** under the FR.                          | Visual flow clarifies time‑ordered interactions.                                    |
 | DQ‑06   | Metrics             | For each NFR, specify the **measurement method** and **dashboard/location**.                                                     | Enables automated performance/security smoke tests.                                 |
@@ -204,7 +149,7 @@ To ensure every future **specification change is crystal‑clear and rich enough
 
 ---
 
-## 11  Build & Test Commands
+## 8  Build & Test Commands
 
 These commands are executed sequentially by Codex in a **network‑isolated** container.  Any non‑zero exit status aborts the PR and sends the logs back as a Draft.
 
@@ -230,7 +175,7 @@ fail-on-error: true
 
 ---
 
-## 12  Code‑Style Guidelines
+## 9  Code‑Style Guidelines
 
 | Tool                     | Command              | Config file                   | Blocker level                           |
 | ------------------------ | -------------------- | ----------------------------- | --------------------------------------- |
@@ -243,7 +188,7 @@ Codex must run SwiftFormat before committing generated files.  PRs failing Swift
 
 ---
 
-## 13  Release Automation (Fastlane)
+## 10  Release Automation (Fastlane)
 
 | Lane       | Purpose                                                               | Triggers                           |
 | ---------- | --------------------------------------------------------------------- | ---------------------------------- |
@@ -254,7 +199,7 @@ Codex may **propose** a release by pushing a tag & opening a “Release Candidat
 
 ---
 
-## 14  Security, Privacy & Secrets
+## 11  Security, Privacy & Secrets
 
 * **Secrets injection**: API keys, Firebase plist, signing certificates are mounted via the Codex Secrets pane. Hard‑coded tokens are banned.
 * **Network policy**: Only `https://api.glancy.app` and Apple endpoints allowed. Codex must refuse new hard‑coded domains.
@@ -262,7 +207,7 @@ Codex may **propose** a release by pushing a tag & opening a “Release Candidat
 
 ---
 
-## 15  Accessibility & Localisation
+## 12  Accessibility & Localisation
 
 * All new screens must pass `accessibilityAudit()` UITest.
 * Snapshot lane must include RTL check for Arabic.
@@ -270,7 +215,7 @@ Codex may **propose** a release by pushing a tag & opening a “Release Candidat
 
 ---
 
-## 16  Performance & Crash Metrics
+## 13  Performance & Crash Metrics
 
 | ID      | Metric              | Target               | Source            |
 | ------- | ------------------- | -------------------- | ----------------- |
