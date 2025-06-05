@@ -45,6 +45,10 @@ For business inquiries, please contact: [support@glancy.com](mailto:support@glan
 **Alternative Flows**  If the network call fails, an error message appears and no history entry is saved.
 **Post-conditions**  The word and timestamp are stored in search history.
 **Exceptions**  Empty input prompts the user for valid text.
+#### Test Cases
+- Cache hit returns result for "hello" instantly.
+- Cache miss triggers DeepSeek call then saves result.
+- Network failure shows error and skips history entry.
 
 ### FR-002 Manage Preferred Languages
 **Context**  A user customizes which languages appear in search results.
@@ -55,6 +59,10 @@ For business inquiries, please contact: [support@glancy.com](mailto:support@glan
 **Alternative Flows**  Selecting more than three languages shows no effect.
 **Post-conditions**  The language bar updates immediately.
 **Exceptions**  At least one language must remain selected.
+#### Test Cases
+- Select two languages and confirm they persist after restart.
+- Attempt to choose four languages; verify only three remain active.
+- Deselect all but one language; ensure at least one is enforced.
 
 ### FR-003 Authentication
 **Context**  Users can log in or out to sync data.
@@ -65,6 +73,10 @@ For business inquiries, please contact: [support@glancy.com](mailto:support@glan
 **Alternative Flows**  Invalid credentials display an error and keep the user logged out.
 **Post-conditions**  When logged in, search history and settings sync to the cloud.
 **Exceptions**  Network errors show a retry prompt.
+#### Test Cases
+- Login with valid password; profile shows user info.
+- Login with invalid code; error message appears.
+- Offline login attempt prompts retry.
 
 ### FR-004 Search History Management
 **Context**  Users revisit recent queries.
@@ -75,6 +87,10 @@ For business inquiries, please contact: [support@glancy.com](mailto:support@glan
 **Alternative Flows**  None.
 **Post-conditions**  History older than ten entries is automatically deleted.
 **Exceptions**  Persistence failures are ignored.
+#### Test Cases
+- Perform search, then verify word saved in history list.
+- Add 11 entries; first entry is automatically removed.
+- Long press an entry; confirm it is deleted.
 
 ## Non-Functional Requirements
 
@@ -83,6 +99,10 @@ For business inquiries, please contact: [support@glancy.com](mailto:support@glan
 | NFR-S01 | Security | All API calls use HTTPS and store keys in plist files. | Static scan passes with zero hard-coded secrets |
 | NFR-P01 | Performance | Cached word lookup responds within 500&nbsp;ms. | Unit test `GlancyTests.swift::test_performance` |
 | NFR-R01 | Reliability | LeanCloud operations succeed 99.5&nbsp;% monthly. | Sentry dashboard `glancy.reliability` |
+### NFR Test Cases
+- NFR-S01: Run static scan to ensure no hard-coded secrets.
+- NFR-P01: Measure cached lookup; must finish within 500 ms.
+- NFR-R01: Monitor Sentry to verify 99.5% operation success.
 
 ## Traceability Matrix
 
@@ -115,3 +135,10 @@ Record NFRs in a table with columns: ID, Category, Requirement, Metric / Thresho
 ### Traceability Matrix
 
 Keep a matrix mapping every requirement ID to its unit, integration, and end-to-end tests. Every row must reference at least one test. Update the matrix whenever tests change.
+
+### Test Case Description Guidelines
+- Use bullet points or tables for clarity.
+- Each requirement lists happy, boundary, and negative cases.
+- Prefix each case with the requirement ID.
+- Write in active voice under 25 words.
+- Align with acceptance criteria and traceability matrix.
