@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Docs/icon.jpg" alt="Glancy App Icon" width="150" style="border-radius: 22%;"/>
+  <img src="icon.jpg" alt="Glancy App Icon" width="150" style="border-radius: 50%;"/>
 </p>
 
 - [🇬🇧 English Version](../README.md)
