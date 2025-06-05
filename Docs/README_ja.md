@@ -2,9 +2,9 @@
   <img src="icon.jpg" alt="Glancy App Icon" width="150" style="border-radius: 20px;"/>
 </p>
 
-- [English Version](README.md)
-- [中文版](Docs/README_zh.md)
-- [日本語版](Docs/README_ja.md)
+- [English Version](../README.md)
+- [中文版](README_zh.md)
+- [日本語版](README_ja.md)
 
 # Glancy
 
