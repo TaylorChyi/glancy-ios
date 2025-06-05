@@ -23,12 +23,52 @@ final class GlancyUITests: XCTestCase {
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    func testSearchAddsHistory() throws {
         let app = XCUIApplication()
         app.launch()
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let searchField = app.textFields["请输入单词"]
+        XCTAssertTrue(searchField.waitForExistence(timeout: 2))
+        searchField.tap()
+        searchField.typeText("hello")
+
+        app.buttons["magnifyingglass"].firstMatch.tap()
+
+        let historyLabel = app.staticTexts["hello"].firstMatch
+        XCTAssertTrue(historyLabel.waitForExistence(timeout: 5))
+
+        if #available(iOS 17.0, *) {
+            XCTAssertNoThrow(try app.performAccessibilityAudit())
+        }
+    }
+
+    @MainActor
+    func testOpenLanguageSettings() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        let gearButton = app.buttons["gear"].firstMatch
+        XCTAssertTrue(gearButton.waitForExistence(timeout: 2))
+        gearButton.tap()
+
+        let settingsNav = app.navigationBars["语言偏好设置"].firstMatch
+        XCTAssertTrue(settingsNav.waitForExistence(timeout: 2))
+        settingsNav.buttons["保存"].tap()
+
+        XCTAssertFalse(settingsNav.exists)
+    }
+
+    @MainActor
+    func testOpenProfileSheet() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        let profileButton = app.buttons["person.crop.circle"].firstMatch
+        XCTAssertTrue(profileButton.waitForExistence(timeout: 2))
+        profileButton.tap()
+
+        XCTAssertTrue(app.staticTexts["登录"].waitForExistence(timeout: 2))
+        app.buttons["关闭"].firstMatch.tap()
     }
 
     @MainActor
